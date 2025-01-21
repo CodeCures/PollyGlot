@@ -10,12 +10,12 @@ export const LANGUAGES = [
     },
     {
         code: 'sp',
-        name: 'Spain',
+        name: 'Spanish',
         flag: SpainFlag,
     },
     {
         code: 'jpn',
-        name: 'Japan',
+        name: 'Japanese',
         flag: japanFlag,
     },
 ];
