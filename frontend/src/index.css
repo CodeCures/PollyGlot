@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.chatbox-container {
+    @apply shadow-xl w-[390px] h-[780px] bg-gray-50 space-y-5
+}
+
+.chatbox-header-wrapper {
+    @apply relative h-[213px] border bg-no-repeat bg-right-top
+}
+
+.chatbox-header-wrapper-overlay {
+    @apply absolute inset-0 bg-[#0D182E] bg-opacity-90
+}
+
+.chatbox-header-content-wrapper {
+    @apply relative z-10 flex items-center justify-center h-full text-white space-x-5;
+}
+
+.chatbox-header-title {
+    @apply text-4xl font-bold text-green-600;
+}
+
+.chatbox-content-wrapper {
+    @apply w-[362px] h-[505px] border-2 border-[#0D182E] rounded-lg p-5 mx-auto
+}
+
+.input-label {
+    @apply block mb-2 text-lg font-bold text-teal-700 text-center
+}
+
+.chat-input {
+    @apply block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-700 dark:focus:ring-blue-500 dark:focus:border-blue-500
+}
+
+.chat-language-response-wrapper {
+    @apply h-[250px] overflow-y-auto flex items-center justify-center
+}
+
+.chatbox-button {
+    @apply relative h-12 w-full overflow-hidden rounded-lg bg-white text-lg shadow
+}
+
+.chatbox-button-overlay {
+    @apply absolute inset-0 w-3 bg-blue-600 transition-all duration-[250ms] ease-out group-hover:w-full
+}
+
+.chatbox-button-text {
+    @apply relative text-black group-hover:text-white
+}
