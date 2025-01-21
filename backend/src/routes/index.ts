@@ -1,9 +1,8 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
+import { translate } from "../controllers/LanguageTranslateController";
 
 const router = Router()
 
-router.post('/', (req: Request, res: Response) => {
-    res.json({ message: 'this is the server' });
-})
+router.post('/translate', translate)
 
 export default router;
