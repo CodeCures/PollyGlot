@@ -16,7 +16,7 @@ export const translate = async (req: Request, res: Response) => {
     }
 
     try {
-        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        const openai = new OpenAI();
 
         const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
