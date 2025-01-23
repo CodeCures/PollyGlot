@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: 'https://pollyglot-backend.azurewebsites.net/api',
     headers: {
         "Content-Type": "application/json"
     }
