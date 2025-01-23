@@ -88,7 +88,7 @@ const App = () => {
                 <p>
                   Select the <span className="text-blue-600 font-bold">language</span> you want me to translate into, type your{' '}
                   <span className="text-blue-600 font-bold">text</span>, and hit{' '}
-                  <span className="text-blue-600 font-bold">send</span>.
+                  <span className="text-blue-600 font-bold">send</span>!
                 </p>
               </div>
             </div>
