@@ -35,7 +35,7 @@
 }
 
 .chat-language-response-wrapper {
-    @apply h-[250px] overflow-y-auto flex items-center justify-center
+    @apply h-[400px] overflow-y-scroll bg-gray-100 p-4 space-y-4
 }
 
 .chatbox-button {

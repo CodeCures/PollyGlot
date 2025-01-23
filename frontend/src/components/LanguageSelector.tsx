@@ -4,30 +4,31 @@ import { LANGUAGES } from "../utils/languages";
 type LanguageSelectorProps = {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
-
 const LanguageSelector = ({ onChange }: LanguageSelectorProps) => (
-    <div className="space-y-5">
-        <h4 className="input-label">Select language 👇</h4>
-        <div className="space-y-2">
-            {LANGUAGES.map(language => (
-                <label
-                    key={language.code}
-                    htmlFor={language.code}
-                    className="space-x-2 w-full flex items-center"
-                >
-                    <input
-                        type="radio"
-                        value={language.name}
-                        name="language"
-                        id={language.code}
-                        onChange={onChange}
-                    />
-                    <span className="font-bold tracking-wide text-sm">{language.name}</span>
-                    <img src={language.flag} alt={`${language.name}-flag`} className="w-6 h-4" />
-                </label>
-            ))}
-        </div>
+    <div className="flex justify-center space-x-3 mt-2">
+        {LANGUAGES.map((language) => (
+            <label
+                key={language.code}
+                htmlFor={language.code}
+                className="cursor-pointer"
+            >
+                <input
+                    type="radio"
+                    className="hidden peer"
+                    value={language.name}
+                    name="language"
+                    id={language.code}
+                    onChange={onChange}
+                />
+                <img
+                    src={language.flag}
+                    alt={`${language.name}-flag`}
+                    className="w-10 h-6 border-2 border-transparent peer-checked:border-blue-500"
+                />
+            </label>
+        ))}
     </div>
 );
 
 export default LanguageSelector;
+
