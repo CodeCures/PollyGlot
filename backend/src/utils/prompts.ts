@@ -9,3 +9,7 @@ export const messages = (text: string, language: string): ChatCompletionMessageP
         },
     ]
 }
+
+export const imageGenerationPromp = (language: string, text: string) => {
+    return `A very polite ${language} person (male or female) saying these words "${text}"`
+}
