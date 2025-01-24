@@ -42,6 +42,39 @@ export const translate = async (req: Request, res: Response) => {
             return;
         }
 
+
+
+        const result = { translation };
+
+        cache.set(cacheKey, result);
+
+        res.json(result);
+    } catch (error: any) {
+        res.status(500).json({ message: `Error: ${error.message}` });
+    }
+};
+
+export const generateImage = async (req: Request, res: Response) => {
+    const { text, language } = req.body;
+
+    // Validate required fields
+    if (!text || !language) {
+        const missingField = !text ? 'text' : 'language';
+        res.status(400).json({ error: `${missingField} is required` });
+        return;
+    }
+
+    try {
+
+        const cacheKey = `${text}`;
+
+        const cachedResult = cache.get(cacheKey);
+        if (cachedResult) {
+            res.json(cachedResult);
+            return;
+        }
+
+
         const image = await openai.images.generate({
             model: 'dall-e-3',
             prompt: imageGenerationPromp(language, text),
@@ -51,10 +84,7 @@ export const translate = async (req: Request, res: Response) => {
             response_format: 'b64_json',
         })
 
-        const result = {
-            translation,
-            image: image.data[0]?.b64_json,
-        };
+        const result = { image: image.data[0]?.b64_json, };
 
         cache.set(cacheKey, result);
 

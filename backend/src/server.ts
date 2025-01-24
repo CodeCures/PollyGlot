@@ -9,6 +9,10 @@ const app = express()
     .use(cors())
     .use(express.json())
 
+app.use('/', (req, res) => {
+    res.send({ message: "welcome to PollyGlot" })
+});
+
 app.use('/api', langTranslateRoute)
 
 app.listen(
