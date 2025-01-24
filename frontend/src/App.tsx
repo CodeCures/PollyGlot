@@ -1,8 +1,9 @@
-import { ChangeEvent, MouseEvent, useState } from 'react';
+import { ChangeEvent, MouseEvent, useState, useRef, useEffect } from 'react';
 import Header from './components/Header';
 import LanguageSelector from './components/LanguageSelector';
 import axios from './utils/axios';
 import ChatInput from './components/ChatInput';
+import { ResponseCard } from './components/ResponseCard';
 
 type ChatInputType = {
   id: string;
@@ -18,10 +19,12 @@ const App = () => {
   const [language, setLanguage] = useState('');
   const [chatHistory, setChatHistory] = useState<ChatInputType[]>([]);
 
+  // Ref to the chat content wrapper
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
   const resetChat = () => {
     setError('');
     setText('');
-    // setLanguage('');
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,13 +40,24 @@ const App = () => {
   const generateId = () => `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
   const handleTranslation = async () => {
+
+    const id = generateId();
+
+    setChatHistory((prevHistory) => [
+      ...prevHistory,
+      { id, text: "", image: "", role: "assistant" },
+    ]);
+
     setLoading(true);
     setError('');
 
     try {
-      const { data } = await axios.post<{ image: string, translation: string }>('/translate', { text, language });
+      axios.post<{ translation: string }>('/translate', { text, language })
+        .then(res => updateChatHistory(id, { text: res.data.translation }));
 
-      addChatMessage(data.translation, 'assistant', data.image);
+      axios.post<{ image: string }>('/generate-image', { text, language })
+        .then(res => updateChatHistory(id, { image: res.data.image }));
+
     } catch (err: any) {
       setError(err.response?.data?.error || err.message || 'An unknown error occurred');
     } finally {
@@ -51,30 +65,37 @@ const App = () => {
     }
   };
 
-  const addChatMessage = (message: string, role: 'user' | 'assistant', image = '',) => {
-    setChatHistory((prevHistory) => [
-      ...prevHistory,
-      { id: generateId(), text: message, image, role },
-    ]);
+  const updateChatHistory = (id: string, update: Record<string, any>) => {
+    setChatHistory((prevHistory) =>
+      prevHistory.map((message) =>
+        message.id === id ? { ...message, ...update } : message
+      )
+    );
   };
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!text) {
-      setError('Text required!');
+    if (!text || !language) {
+      setError(`${!text ? 'Text' : 'Language'} required!`);
       return;
     }
 
-    if (!language) {
-      setError('Language required!');
-      return;
-    }
+    setChatHistory((prevHistory) => [
+      ...prevHistory,
+      { id: generateId(), text, image: "", role: "user" },
+    ]);
 
-    addChatMessage(text, 'user');
     handleTranslation();
     resetChat();
   };
+
+  // Automatically scroll to the bottom when chatHistory changes
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatHistory]);
 
   return (
     <div className="flex space-x-10">
@@ -97,20 +118,20 @@ const App = () => {
             {chatHistory.map(({ id, text, image, role }) => (
               <div
                 key={id}
-                className={`flex items-start space-x-3 ${role === 'user' ? 'flex-row-reverse' : ''
-                  }`}
+                className={`flex items-start space-x-3 ${role === 'user' ? 'flex-row-reverse' : ''}`}
               >
                 <div
-                  className={`p-3 rounded-lg max-w-lg text-xs ${role === 'user'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-800'
+                  className={`p-3 rounded-lg max-w-lg text-xs ${role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
                     }`}
                 >
-                  {role === 'assistant' && <img src={`data:image/png;base64,${image}`} />}
-                  <p className={role === 'assistant' ? 'font-bold' : ''}>{text}</p>
+                  {role === 'assistant' && <ResponseCard image={image} text={text} />}
+                  {role === 'user' && <p>{text}</p>}
                 </div>
               </div>
             ))}
+
+            {/* Scroll anchor */}
+            <div ref={chatEndRef} />
           </div>
 
           {/* Input Components */}
