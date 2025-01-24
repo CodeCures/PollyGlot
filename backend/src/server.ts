@@ -9,7 +9,7 @@ const app = express()
     .use(cors())
     .use(express.json())
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
     res.send({ message: "welcome to PollyGlot" })
 });
 
